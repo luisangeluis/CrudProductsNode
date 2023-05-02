@@ -15,14 +15,19 @@ const Product = db.define("product", {
     type: DataTypes.TEXT,
     allowNull: false
   },
-  brand:{
-    type:DataTypes.STRING,
-    allowNull:false
+  brand: {
+    type: DataTypes.STRING,
+    allowNull: false
   },
   price: {
     type: DataTypes.DECIMAL,
     allowNull: false
+  },
+  status: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    defaultValue: "active" //active,suspended,deleted
   }
 })
 
-module.exports=Product;
+module.exports = Product;

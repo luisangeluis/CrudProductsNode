@@ -48,11 +48,8 @@ const post = (req, res) => {
 }
 
 const update = (req, res) => {
-
-  //! TODO add a middleware before of update a product
   const productId = req.params.id;
   const data = req.body;
-  console.log({ productId });
 
   const { id, ...restOfData } = data;
 
@@ -70,9 +67,23 @@ const update = (req, res) => {
 
 }
 
+const remove = (req, res) => {
+  const productId = req.params.id;
+
+  productsControllers.deleteProduct(productId)
+    .then(response =>
+      response
+        ? res.status(204).json()
+        : res.status(404).json({ message: `Product with id:${productId} doesn't exist` })
+    )
+    .catch(error => res.status(400).json({ message: error.message }));
+
+}
+
 module.exports = {
   getAll,
   getById,
   post,
-  update
+  update,
+  remove
 }

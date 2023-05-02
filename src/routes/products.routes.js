@@ -1,7 +1,7 @@
 //Dependencies
 const router = require("express").Router();
 //Middlewares
-const productExists = require("../middlewares/productExists");
+const productExistMiddleware = require("../middlewares/productExist.middleware");
 //Services
 const productServices = require("../services/products.http");
 
@@ -11,6 +11,7 @@ router.route("/")
 
 router.route("/:id")
   .get(productServices.getById)
-  .put(productExists, productServices.update);
+  .put(productExistMiddleware, productServices.update)
+  .delete(productServices.remove);
 
 exports.router = router;

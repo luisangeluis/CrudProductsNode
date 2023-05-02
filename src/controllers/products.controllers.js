@@ -2,10 +2,12 @@
 const uuid = require("uuid");
 //Controllers
 const Products = require("../models/product.model");
+const { where } = require("sequelize");
 
 const readAllProducts = async () => {
   const response = await Products.findAll({
-    attributes: ["id", "name", "description", "brand", "price"]
+    where: { status: "active" },
+    attributes: ["id", "name", "description", "brand", "price", "status"]
   });
 
   return response;
@@ -14,7 +16,7 @@ const readAllProducts = async () => {
 const readProductById = async (id) => {
   const response = await Products.findOne({
     where: { id },
-    attributes: ["id", "name", "description", "brand", "price"]
+    attributes: ["id", "name", "description", "brand", "price", "status"]
   })
 
   return response;
@@ -41,9 +43,21 @@ const updateProduct = async (productId, data) => {
   return response;
 }
 
+const deleteProduct = async (productId) => {
+  const del = "deleted";
+
+  const response = await Products.update(
+    { status: del },
+    { where: { id: productId } }
+  );
+
+  return response;
+}
+
 module.exports = {
   readAllProducts,
   readProductById,
   createProduct,
-  updateProduct
+  updateProduct,
+  deleteProduct
 }

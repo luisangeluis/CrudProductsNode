@@ -1,6 +1,6 @@
 const Products = require("../models/product.model");
 
-const productExists = (req, res, next) => {
+const productExistMiddleware = (req, res, next) => {
   const productId = req.params.id;
 
   Products.findOne({ where: { id: productId } })
@@ -13,4 +13,4 @@ const productExists = (req, res, next) => {
     })
 }
 
-module.exports = productExists;
+module.exports = productExistMiddleware;

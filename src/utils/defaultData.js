@@ -22,6 +22,14 @@ const generateData = async () => {
       description: "drill",
       brand: "truper",
       price: 100.20
+    },
+    {
+      id: "81d20e3f-c742-412e-be9f-7d0ad8c6faa5",
+      name: "play station",
+      description: "play station console",
+      brand: "sony",
+      price: 650.00,
+      status:"suspended"
     }
   ])
 }
