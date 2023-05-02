@@ -5,12 +5,22 @@ const Products = require("../models/product.model");
 
 const readAllProducts = async () => {
   const response = await Products.findAll({
-    attributes: ["id", "name", "description", "price"]
+    attributes: ["id", "name", "description", "brand", "price"]
   });
 
   return response;
 }
 
-module.exports = {  
-  readAllProducts
+const readProductById= async (id)=>{
+  const response = await Products.findOne({
+    where:{id},
+    attributes: ["id", "name", "description", "brand", "price"]
+  })
+
+  return response;
+}
+
+module.exports = {
+  readAllProducts,
+  readProductById
 }

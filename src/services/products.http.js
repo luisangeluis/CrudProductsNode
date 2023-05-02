@@ -6,6 +6,19 @@ const getAll = (req, res) => {
     .catch(error => res.status(400).json({ message: error.message }))
 }
 
+const getById = (req, res) => {
+  const id = req.params.id;
+
+  productsControllers.readProductById(id)
+    .then(response => {
+      response
+        ? res.status(200).json(response)
+        : res.status(404).json({ message:`The product with id: ${id} doesn't exist`})
+    })
+    .catch(error => res.status(400).json({ message: error.message }))
+}
+
 module.exports = {
-  getAll
+  getAll,
+  getById
 }
