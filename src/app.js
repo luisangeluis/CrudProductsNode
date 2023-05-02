@@ -1,9 +1,9 @@
 //Dependencies
 const express = require("express");
 const initModels = require("./models/init.models");
+const defaultData = require("./utils/defaultData");
 
 const app = express();
-
 
 //Database
 const { db } = require("./database/database");
@@ -17,7 +17,7 @@ if (process.env.NODE_ENV === 'production') {
   db.sync()
     .then(() => {
       console.log('database synced');
-      // defaultData();
+      defaultData();
     })
     .catch(error => console.log(error))
 } else {
@@ -25,7 +25,7 @@ if (process.env.NODE_ENV === 'production') {
     // db.sync()
     .then(() => {
       console.log('database synced');
-      // defaultData();
+      defaultData();
     })
     .catch(error => console.log(error))
 }
