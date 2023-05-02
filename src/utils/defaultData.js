@@ -4,14 +4,15 @@ const generateData = async () => {
   await Products.bulkCreate([
     {
       id: "fef3a08d-2cec-4728-9745-7cbd2b37e557",
-      name: "xbox", description: "Xbox console",
+      name: "xbox",
+      description: "Xbox console",
       brand: "xbox",
       price: 400.00
     },
     {
       id: "97006fe0-4a35-47f4-bfbf-fc962e5fe500",
       name: "refrigerator",
-      description: "Consola xbox",
+      description: "refrigerator 14''",
       brand: "mabe",
       price: 600.50
     },

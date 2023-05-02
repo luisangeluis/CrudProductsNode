@@ -2,8 +2,11 @@
 const express = require("express");
 const initModels = require("./models/init.models");
 const defaultData = require("./utils/defaultData");
+const cors = require('cors');
 
 const app = express();
+app.use(express.json());
+app.use(cors());
 
 //Database
 const { db } = require("./database/database");
