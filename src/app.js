@@ -3,10 +3,16 @@ const express = require("express");
 const initModels = require("./models/init.models");
 const defaultData = require("./utils/defaultData");
 const cors = require('cors');
+const fileUpload = require('express-fileupload');
 
+//Init configurations
 const app = express();
 app.use(express.json());
 app.use(cors());
+app.use(fileUpload({
+  useTempFiles : true,
+  tempFileDir : './uploads'
+}));
 
 //Database
 const { db } = require("./database/database");

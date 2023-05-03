@@ -4,10 +4,14 @@ const router = require("express").Router();
 const productExistMiddleware = require("../middlewares/productExist.middleware");
 //Services
 const productServices = require("../services/products.http");
+const productsImagesServices = require("../services/productsImages.http");
 
 router.route("/")
   .get(productServices.getAll)
   .post(productServices.post);
+
+router.route("/:id/post-images")
+  .post(productsImagesServices.postImages);
 
 router.route("/:id")
   .get(productServices.getById)
