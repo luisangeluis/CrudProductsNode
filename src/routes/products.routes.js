@@ -12,6 +12,6 @@ router.route("/")
 router.route("/:id")
   .get(productServices.getById)
   .put(productExistMiddleware, productServices.update)
-  .delete(productServices.remove);
+  .delete(productServices.remove)
 
 exports.router = router;
