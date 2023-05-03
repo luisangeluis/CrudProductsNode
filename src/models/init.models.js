@@ -11,7 +11,6 @@ const initModels = () => {
   //Product->ProductImage
   product.hasMany(productImage);
   productImage.belongsTo(product);
-
 }
 
 module.exports = initModels;

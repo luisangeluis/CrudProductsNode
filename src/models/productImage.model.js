@@ -1,7 +1,7 @@
 const { db } = require("../database/database");
 const { DataTypes } = require('sequelize');
 
-const productImage = db.define("productImage", {
+const productImage = db.define("product_image", {
   id: {
     primaryKey: true,
     type: DataTypes.UUID,
@@ -9,7 +9,8 @@ const productImage = db.define("productImage", {
   },
   productId: {
     type: DataTypes.UUID,
-    allowNull: false
+    allowNull: false,
+    field:"product_id"
   },
   imageUrl: {
     type: DataTypes.STRING,
