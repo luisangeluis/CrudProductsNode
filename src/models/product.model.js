@@ -27,6 +27,11 @@ const Product = db.define("product", {
     type: DataTypes.STRING,
     allowNull: false,
     defaultValue: "active" //active,suspended,deleted
+  },
+  productCategoryId:{
+    type:DataTypes.UUID,
+    allowNull:false,
+    // field:"category_id"
   }
 })
 
