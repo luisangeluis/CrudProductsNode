@@ -43,6 +43,7 @@ const post = (req, res) => {
 
   productsControllers.createProduct(data,file)
     .then(response => {
+      // console.log({response});
       return res.status(201).json({
         message: `Product createad successfully with id ${response.id}`,
         product: response

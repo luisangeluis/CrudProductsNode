@@ -2,7 +2,7 @@
 const uuid = require("uuid");
 //Controllers
 const ProductsImagesControllers = require("../controllers/productsImages.controllers");
-//Controllers
+//Models
 const Products = require("../models/product.model");
 
 const readAllProducts = async () => {
@@ -29,15 +29,8 @@ const createProduct = async (data, file) => {
       ...data,
       id: uuid.v4()
     });
-
-    // console.log(response);
-    // console.log(file);
-    if (file?.image) {
-      console.log(file.image);
-      await ProductsImagesControllers.createImage(newProduct.id,file);
-
-    }
-
+    // console.log(newProduct);
+    if (file?.image) await ProductsImagesControllers.createImage(newProduct.id, file);
 
     return newProduct;
   } catch (error) {
