@@ -1,8 +1,9 @@
 //Dependencies
 const uuid = require("uuid");
 //Controllers
+const ProductsImagesControllers = require("../controllers/productsImages.controllers");
+//Controllers
 const Products = require("../models/product.model");
-const { where } = require("sequelize");
 
 const readAllProducts = async () => {
   const response = await Products.findAll({
@@ -22,13 +23,26 @@ const readProductById = async (id) => {
   return response;
 }
 
-const createProduct = async (data) => {
-  const response = await Products.create({
-    ...data,
-    id: uuid.v4()
-  });
+const createProduct = async (data, file) => {
+  try {
+    const newProduct = await Products.create({
+      ...data,
+      id: uuid.v4()
+    });
 
-  return response;
+    // console.log(response);
+    // console.log(file);
+    if (file?.image) {
+      console.log(file.image);
+      await ProductsImagesControllers.createImage(newProduct.id,file);
+
+    }
+
+
+    return newProduct;
+  } catch (error) {
+    return error;
+  }
 }
 
 const updateProduct = async (productId, data) => {

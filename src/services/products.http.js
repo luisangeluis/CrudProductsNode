@@ -20,24 +20,28 @@ const getById = (req, res) => {
 
 const post = (req, res) => {
   const data = req.body;
+  let file = {};
 
-  if (!Object.keys(data).length) {
-    return res.status(400).json({ message: "Missing data" })
-  }
+  if (!Object.keys(data).length) res.status(400).json({ message: "Missing data" })
 
-  if (!data.name || !data.description || !data.brand || !data.price) {
+  if (!data.name || !data.description || !data.brand || !data.price || !data.productCategoryId) {
     return res.status(400).json({
       message: "At least these  fields must be completed",
       fields: {
         name: "string",
         description: "string",
         brand: "string",
-        price: "number"
+        price: "number",
+        productCategoryId: "string"
       }
     })
   }
 
-  productsControllers.createProduct(data)
+  if (req.files?.image) file = req.files;
+
+  // console.log(file);
+
+  productsControllers.createProduct(data,file)
     .then(response => {
       return res.status(201).json({
         message: `Product createad successfully with id ${response.id}`,
