@@ -4,11 +4,16 @@ const uuid = require("uuid");
 const ProductsImagesControllers = require("../controllers/productsImages.controllers");
 //Models
 const Products = require("../models/product.model");
+const ProductsImages = require("../models/productImage.model");
 
 const readAllProducts = async () => {
   const response = await Products.findAll({
     where: { status: "active" },
-    attributes: ["id", "name", "description", "brand", "price", "status"]
+    attributes: ["id", "name", "description", "brand", "price", "status"],
+    include: {
+      model: ProductsImages,
+      attributes: ["id", "imageUrl",]
+    }
   });
 
   return response;
@@ -17,7 +22,12 @@ const readAllProducts = async () => {
 const readProductById = async (id) => {
   const response = await Products.findOne({
     where: { id },
-    attributes: ["id", "name", "description", "brand", "price", "status"]
+    attributes: ["id", "name", "description", "brand", "price", "status"],
+    include:
+    {
+      model: ProductsImages,
+      attributes: ["id", "imageUrl",]
+    }
   })
 
   return response;
@@ -29,7 +39,6 @@ const createProduct = async (data, file) => {
       ...data,
       id: uuid.v4()
     });
-    // console.log(newProduct);
     if (file?.image) await ProductsImagesControllers.createImage(newProduct.id, file);
 
     return newProduct;
@@ -38,7 +47,7 @@ const createProduct = async (data, file) => {
   }
 }
 
-const updateProduct = async (productId, data) => {
+const updateProduct = async (productId, data, file) => {
   const { id, ...restOfData } = data;
 
   //Update always returns an array
@@ -51,14 +60,22 @@ const updateProduct = async (productId, data) => {
 }
 
 const deleteProduct = async (productId) => {
-  const del = "deleted";
+  try {
+    const del = "deleted";
+    
+    await ProductsImagesControllers.deleteAllImages(productId);
 
-  const response = await Products.update(
-    { status: del },
-    { where: { id: productId } }
-  );
+    const response = await Products.update(
+      { status: del },
+      { where: { id: productId } }
+    );
 
-  return response;
+    // console.log({ response });
+    
+    return response;
+  } catch (error) {
+    return error;
+  }
 }
 
 module.exports = {

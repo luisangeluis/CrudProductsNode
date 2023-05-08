@@ -39,11 +39,8 @@ const post = (req, res) => {
 
   if (req.files?.image) file = req.files;
 
-  // console.log(file);
-
   productsControllers.createProduct(data,file)
     .then(response => {
-      // console.log({response});
       return res.status(201).json({
         message: `Product createad successfully with id ${response.id}`,
         product: response
@@ -62,7 +59,7 @@ const update = (req, res) => {
 
   productsControllers.updateProduct(productId, restOfData)
     .then(response => {
-      console.log({ response });
+      // console.log({ response });
       if (response[0])
         return res.status(200).json({ message: `Product with id: ${productId} edited successfully` })
       else

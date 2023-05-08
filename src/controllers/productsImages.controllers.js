@@ -27,6 +27,28 @@ const createImage = async (productId, file) => {
   }
 }
 
+//Delete all images of any product
+const deleteAllImages = async (productId) => {
+  try {
+    const cloudImages = await ProductsImages.findAll({
+      where: { productId },
+      attributes: ["cloudinaryId"]
+    })
+
+    // console.log(cloudImages);
+    cloudImages.map(async (image) => cloudinary.deleteImage(image.cloudinaryId))
+
+    //? Destroy devuelve 0 o 1 como respuesta
+    const response = await ProductsImages.destroy({ where: { productId } })
+    // console.log({ response });
+
+    return response;
+  } catch (error) {
+    return error;
+  }
+}
+
 module.exports = {
-  createImage
+  createImage,
+  deleteAllImages
 }
