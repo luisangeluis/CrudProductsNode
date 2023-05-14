@@ -39,7 +39,14 @@ const createProduct = async (data, file) => {
       ...data,
       id: uuid.v4()
     });
-    if (file?.image) await ProductsImagesControllers.createImage(newProduct.id, file);
+
+    if (file?.image) {
+      console.log(file.image);
+
+      file.image.length
+        ? await ProductsImagesControllers.createImages(newProduct.id, file.image)
+        : await ProductsImagesControllers.createImage(newProduct.id, file.image);
+    }
 
     return newProduct;
   } catch (error) {
@@ -62,7 +69,7 @@ const updateProduct = async (productId, data, file) => {
 const deleteProduct = async (productId) => {
   try {
     const del = "deleted";
-    
+
     await ProductsImagesControllers.deleteAllImages(productId);
 
     const response = await Products.update(
@@ -71,7 +78,7 @@ const deleteProduct = async (productId) => {
     );
 
     // console.log({ response });
-    
+
     return response;
   } catch (error) {
     return error;

@@ -49,6 +49,11 @@ app.get('/', (req, res) => {
   res.send('hello world')
 })
 
+app.post("/upload-images",(req,res)=>{
+  console.log(req.files);
+  res.send('hello images')
+})
+
 module.exports = {
   app
 }

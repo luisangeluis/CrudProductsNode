@@ -37,9 +37,11 @@ const post = (req, res) => {
     })
   }
 
-  if (req.files?.image) file = req.files;
+  if (req.files?.image) {
+    file = req.files;
+  }
 
-  productsControllers.createProduct(data,file)
+  productsControllers.createProduct(data, file)
     .then(response => {
       return res.status(201).json({
         message: `Product createad successfully with id ${response.id}`,
@@ -66,7 +68,6 @@ const update = (req, res) => {
         return res.status(400).json({ message: `Please enter valid data` })
     })
     .catch(error => res.status(400).json({ message: error.message }))
-
 }
 
 const remove = (req, res) => {
@@ -79,7 +80,6 @@ const remove = (req, res) => {
         : res.status(404).json({ message: `Product with id:${productId} doesn't exist` })
     )
     .catch(error => res.status(400).json({ message: error.message }));
-
 }
 
 module.exports = {

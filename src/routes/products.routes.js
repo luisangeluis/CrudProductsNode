@@ -11,7 +11,7 @@ router.route("/")
   .post(productServices.post);
 
 router.route("/:id/post-images")
-  .post(productsImagesServices.postImages);
+  .post(productExistMiddleware, productsImagesServices.postImages);
 
 router.route("/:id")
   .get(productServices.getById)
