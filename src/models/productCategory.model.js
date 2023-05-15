@@ -11,6 +11,10 @@ const ProductCategory = db.define("productCategory", {
     type: DataTypes.STRING,
     allowNull: false
   }
-})
+},
+{
+  tableName: "product_categories"
+}
+)
 
 module.exports = ProductCategory;

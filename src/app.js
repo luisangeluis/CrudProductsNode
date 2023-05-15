@@ -36,8 +36,10 @@ if (process.env.NODE_ENV === 'production') {
 
 //Routes
 const productsRouter = require("./routes/products.routes").router;
+const productCateriesRouter = require("./routes/productCategories").router;
 
 app.use("/api/v1/products", productsRouter);
+app.use("/api/v1/productCategories", productCateriesRouter);
 
 app.get('/', (req, res) => {
   res.send('hello world')
