@@ -7,7 +7,7 @@ const { where } = require("sequelize");
 const readAllProducts = async () => {
   const response = await Products.findAll({
     where: { status: "active" },
-    attributes: ["id", "name", "description", "brand", "price", "status"]
+    attributes: ["id", "name", "description", "brand", "price", "status","productCategoryId"]
   });
 
   return response;
@@ -16,7 +16,7 @@ const readAllProducts = async () => {
 const readProductById = async (id) => {
   const response = await Products.findOne({
     where: { id },
-    attributes: ["id", "name", "description", "brand", "price", "status"]
+    attributes: ["id", "name", "description", "brand", "price", "status","productCategoryId"]
   })
 
   return response;
