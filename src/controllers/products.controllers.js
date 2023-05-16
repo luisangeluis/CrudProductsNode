@@ -55,15 +55,28 @@ const createProduct = async (data, file) => {
 }
 
 const updateProduct = async (productId, data, file) => {
-  const { id, ...restOfData } = data;
+  try {
+    const { id, ...restOfData } = data;
+    console.log({ productId, restOfData, file });
 
-  //Update always returns an array
-  const response = await Products.update(
-    restOfData,
-    { where: { id: productId } }
-  );
+    //Update always returns an array
+    const response = await Products.update(
+      restOfData,
+      { where: { id: productId } }
+    );
 
-  return response;
+    if (file?.image) {
+      // console.log(file.image);
+
+      file.image.length
+        ? await ProductsImagesControllers.createImages(productId, file.image)
+        : await ProductsImagesControllers.createImage(productId, file.image);
+    }
+
+    return response;
+  } catch (error) {
+    return error;
+  }
 }
 
 const deleteProduct = async (productId) => {

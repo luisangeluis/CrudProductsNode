@@ -3,16 +3,14 @@ const express = require("express");
 const initModels = require("./models/init.models");
 const defaultData = require("./utils/defaultData");
 const cors = require('cors');
-const fileUpload = require('express-fileupload');
+// const fileUpload = require('express-fileupload');
+const uploadImages = require("./utils/fileUpload");
 
 //Init configurations
 const app = express();
 app.use(express.json());
 app.use(cors());
-app.use(fileUpload({
-  useTempFiles : true,
-  tempFileDir : 'src/uploads'
-}));
+// app.use(uploadImages);
 
 //Database
 const { db } = require("./database/database");
@@ -39,7 +37,6 @@ if (process.env.NODE_ENV === 'production') {
     .catch(error => console.log(error))
 }
 
-
 //Routes
 const productsRouter = require("./routes/products.routes").router;
 
@@ -49,7 +46,7 @@ app.get('/', (req, res) => {
   res.send('hello world')
 })
 
-app.post("/upload-images",(req,res)=>{
+app.post("/upload-images", (req, res) => {
   console.log(req.files);
   res.send('hello images')
 })

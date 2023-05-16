@@ -54,14 +54,19 @@ const post = (req, res) => {
 const update = (req, res) => {
   const productId = req.params.id;
   const data = req.body;
+  let file = {}
 
   const { id, ...restOfData } = data;
 
-  if (!Object.keys(restOfData).length) return res.status(400).json({ message: "Missing data" })
+  if (!Object.keys(restOfData).length) return res.status(400).json({ message: "Missing data" });
 
-  productsControllers.updateProduct(productId, restOfData)
+  if (req.files?.image) {
+    file = req.files;
+  }
+
+  productsControllers.updateProduct(productId, restOfData, file)
     .then(response => {
-      // console.log({ response });
+      console.log({ response });
       if (response[0])
         return res.status(200).json({ message: `Product with id: ${productId} edited successfully` })
       else
