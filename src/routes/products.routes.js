@@ -11,8 +11,9 @@ router.route("/")
   .get(productServices.getAll)
   .post(uploadImages, productServices.post);
 
-router.route("/:id/post-images")
-  .post(productExistMiddleware, productsImagesServices.postImages);
+router.route("/:id/images")
+  .post(productExistMiddleware, productsImagesServices.postImages)
+  .delete(productExistMiddleware, productsImagesServices.deleteImage);
 
 router.route("/:id")
   .get(productServices.getById)

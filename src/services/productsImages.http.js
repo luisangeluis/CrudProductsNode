@@ -30,6 +30,28 @@ const postImages = (req, res) => {
   }
 }
 
+const deleteImage = (req, res) => {
+  const productId = req.params.id;
+  const data = req.body;
+
+  if (!data.cloudinaryId) {
+    return res.status(400).json({
+      message: "CloudinaryId field must be completed"
+    })
+  }
+
+  productsImagesControllers.deleteImage(productId, data.cloudinaryId)
+    .then(response => {
+      response
+        ? res.status(204).json()
+        : res.status(404).json({ message: "Invalid" })
+    })
+    .catch(error = () => {
+      return res.status(400).json({ message: error.message });
+    })
+}
+
 module.exports = {
-  postImages
+  postImages,
+  deleteImage
 }

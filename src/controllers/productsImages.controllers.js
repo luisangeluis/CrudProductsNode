@@ -39,6 +39,22 @@ const createImages = async (productId, images) => {
   }
 }
 
+const deleteImage = async (productId, cloudinaryId) => {
+  try {
+    await cloudinary.deleteImage(cloudinaryId)
+
+    const response = ProductsImages.destroy({
+      where: {
+        productId,
+        cloudinaryId
+      }
+    })
+
+    return response;
+  } catch (error) {
+    return error;
+  }
+}
 
 //Delete all images of any product
 const deleteAllImages = async (productId) => {
@@ -61,5 +77,6 @@ const deleteAllImages = async (productId) => {
 module.exports = {
   createImage,
   createImages,
+  deleteImage,
   deleteAllImages
 }
