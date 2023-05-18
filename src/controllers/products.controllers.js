@@ -1,13 +1,19 @@
 //Dependencies
 const uuid = require("uuid");
 //Controllers
+const ProductsImagesControllers = require("../controllers/productsImages.controllers");
+//Models
 const Products = require("../models/product.model");
-const { where } = require("sequelize");
+const ProductsImages = require("../models/productImage.model");
 
 const readAllProducts = async () => {
   const response = await Products.findAll({
     where: { status: "active" },
-    attributes: ["id", "name", "description", "brand", "price", "status","productCategoryId"]
+    attributes: ["id", "name", "description", "brand", "price", "status"],
+    include: {
+      model: ProductsImages,
+      attributes: ["id", "imageUrl","cloudinaryId"]
+    }
   });
 
   return response;
@@ -16,42 +22,84 @@ const readAllProducts = async () => {
 const readProductById = async (id) => {
   const response = await Products.findOne({
     where: { id },
+<<<<<<< HEAD
+    attributes: ["id", "name", "description", "brand", "price", "status"],
+    include:
+    {
+      model: ProductsImages,
+      attributes: ["id", "imageUrl",]
+    }
+=======
     attributes: ["id", "name", "description", "brand", "price", "status","productCategoryId"]
+>>>>>>> main
   })
 
   return response;
 }
 
-const createProduct = async (data) => {
-  const response = await Products.create({
-    ...data,
-    id: uuid.v4()
-  });
+const createProduct = async (data, file) => {
+  try {
+    const newProduct = await Products.create({
+      ...data,
+      id: uuid.v4()
+    });
 
-  return response;
+    if (file?.image) {
+      console.log(file.image);
+
+      file.image.length
+        ? await ProductsImagesControllers.createImages(newProduct.id, file.image)
+        : await ProductsImagesControllers.createImage(newProduct.id, file.image);
+    }
+
+    return newProduct;
+  } catch (error) {
+    return error;
+  }
 }
 
-const updateProduct = async (productId, data) => {
-  const { id, ...restOfData } = data;
+const updateProduct = async (productId, data, file) => {
+  try {
+    const { id, ...restOfData } = data;
+    console.log({ productId, restOfData, file });
 
-  //Update always returns an array
-  const response = await Products.update(
-    restOfData,
-    { where: { id: productId } }
-  );
+    //Update always returns an array
+    const response = await Products.update(
+      restOfData,
+      { where: { id: productId } }
+    );
 
-  return response;
+    if (file?.image) {
+      // console.log(file.image);
+
+      file.image.length
+        ? await ProductsImagesControllers.createImages(productId, file.image)
+        : await ProductsImagesControllers.createImage(productId, file.image);
+    }
+
+    return response;
+  } catch (error) {
+    return error;
+  }
 }
 
 const deleteProduct = async (productId) => {
-  const del = "deleted";
+  try {
+    const del = "deleted";
 
-  const response = await Products.update(
-    { status: del },
-    { where: { id: productId } }
-  );
+    await ProductsImagesControllers.deleteAllImages(productId);
 
-  return response;
+    const response = await Products.update(
+      { status: del },
+      { where: { id: productId } }
+    );
+
+    // console.log({ response });
+
+    return response;
+  } catch (error) {
+    return error;
+  }
 }
 
 module.exports = {

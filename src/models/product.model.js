@@ -31,7 +31,7 @@ const Product = db.define("product", {
   productCategoryId:{
     type:DataTypes.UUID,
     allowNull:false,
-    // field:"category_id"
+    field:"product_category_id"
   }
 })
 

@@ -20,24 +20,28 @@ const getById = (req, res) => {
 
 const post = (req, res) => {
   const data = req.body;
+  let file = {};
 
-  if (!Object.keys(data).length) {
-    return res.status(400).json({ message: "Missing data" })
-  }
+  if (!Object.keys(data).length) res.status(400).json({ message: "Missing data" })
 
-  if (!data.name || !data.description || !data.brand || !data.price) {
+  if (!data.name || !data.description || !data.brand || !data.price || !data.productCategoryId) {
     return res.status(400).json({
       message: "At least these  fields must be completed",
       fields: {
         name: "string",
         description: "string",
         brand: "string",
-        price: "number"
+        price: "number",
+        productCategoryId: "string"
       }
     })
   }
 
-  productsControllers.createProduct(data)
+  if (req.files?.image) {
+    file = req.files;
+  }
+
+  productsControllers.createProduct(data, file)
     .then(response => {
       return res.status(201).json({
         message: `Product createad successfully with id ${response.id}`,
@@ -50,12 +54,17 @@ const post = (req, res) => {
 const update = (req, res) => {
   const productId = req.params.id;
   const data = req.body;
+  let file = {}
 
   const { id, ...restOfData } = data;
 
-  if (!Object.keys(restOfData).length) return res.status(400).json({ message: "Missing data" })
+  if (!Object.keys(restOfData).length) return res.status(400).json({ message: "Missing data" });
 
-  productsControllers.updateProduct(productId, restOfData)
+  if (req.files?.image) {
+    file = req.files;
+  }
+
+  productsControllers.updateProduct(productId, restOfData, file)
     .then(response => {
       console.log({ response });
       if (response[0])
@@ -64,7 +73,6 @@ const update = (req, res) => {
         return res.status(400).json({ message: `Please enter valid data` })
     })
     .catch(error => res.status(400).json({ message: error.message }))
-
 }
 
 const remove = (req, res) => {
@@ -77,7 +85,6 @@ const remove = (req, res) => {
         : res.status(404).json({ message: `Product with id:${productId} doesn't exist` })
     )
     .catch(error => res.status(400).json({ message: error.message }));
-
 }
 
 module.exports = {
