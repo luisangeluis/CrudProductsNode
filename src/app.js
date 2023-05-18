@@ -5,12 +5,14 @@ const defaultData = require("./utils/defaultData");
 const cors = require('cors');
 // const fileUpload = require('express-fileupload');
 const uploadImages = require("./utils/fileUpload");
+const apiLimiter = require('./utils/limiter');
 
 //Init configurations
 const app = express();
 app.use(express.json());
 app.use(cors());
 // app.use(uploadImages);
+app.use(apiLimiter);
 
 //Database
 const { db } = require("./database/database");
@@ -29,7 +31,6 @@ if (process.env.NODE_ENV === 'production') {
     .catch(error => console.log(error))
 } else {
   db.sync({ force: true })
-    // db.sync()
     .then(() => {
       console.log('database synced');
       defaultData();
@@ -39,8 +40,10 @@ if (process.env.NODE_ENV === 'production') {
 
 //Routes
 const productsRouter = require("./routes/products.routes").router;
+const productCateriesRouter = require("./routes/productCategories").router;
 
 app.use("/api/v1/products", productsRouter);
+app.use("/api/v1/productCategories", productCateriesRouter);
 
 app.get('/', (req, res) => {
   res.send('hello world')

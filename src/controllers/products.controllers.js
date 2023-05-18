@@ -22,12 +22,16 @@ const readAllProducts = async () => {
 const readProductById = async (id) => {
   const response = await Products.findOne({
     where: { id },
+<<<<<<< HEAD
     attributes: ["id", "name", "description", "brand", "price", "status"],
     include:
     {
       model: ProductsImages,
       attributes: ["id", "imageUrl",]
     }
+=======
+    attributes: ["id", "name", "description", "brand", "price", "status","productCategoryId"]
+>>>>>>> main
   })
 
   return response;
