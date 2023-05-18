@@ -34,13 +34,13 @@ const deleteImage = (req, res) => {
   const productId = req.params.id;
   const data = req.body;
 
-  if (!data.cloudinaryId) {
+  if (!data.imageId) {
     return res.status(400).json({
       message: "CloudinaryId field must be completed"
     })
   }
 
-  productsImagesControllers.deleteImage(productId, data.cloudinaryId)
+  productsImagesControllers.deleteImage(productId, data.imageId)
     .then(response => {
       response
         ? res.status(204).json()

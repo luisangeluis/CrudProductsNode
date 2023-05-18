@@ -11,13 +11,16 @@ router.route("/")
   .get(productServices.getAll)
   .post(uploadImages, productServices.post);
 
-router.route("/:id/images")
-  .post(productExistMiddleware, productsImagesServices.postImages)
+router.route("/:id/post-images")
+  .post(productExistMiddleware, uploadImages, productsImagesServices.postImages)
+
+router.route("/:id/delete-images/")
   .delete(productExistMiddleware, productsImagesServices.deleteImage);
+
 
 router.route("/:id")
   .get(productServices.getById)
-  .put(productExistMiddleware,uploadImages, productServices.update)
+  .put(productExistMiddleware, uploadImages, productServices.update)
   .delete(productServices.remove)
 
 exports.router = router;

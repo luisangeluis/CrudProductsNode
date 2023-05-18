@@ -12,7 +12,7 @@ const readAllProducts = async () => {
     attributes: ["id", "name", "description", "brand", "price", "status"],
     include: {
       model: ProductsImages,
-      attributes: ["id", "imageUrl",]
+      attributes: ["id", "imageUrl","cloudinaryId"]
     }
   });
 
