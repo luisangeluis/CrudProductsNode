@@ -2,33 +2,47 @@
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, Sequelize) {
-    /**
-     * Add altering commands here.
-     *
-     * Example:
-     * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
-     */
-
-    await queryInterface.changeColumn("product","productCategoryId",{
-      type:Sequelize.UUID,
-      allowNull:false,
-      field:"product_category_id"
-    })
+  async up(queryInterface, Sequelize) {
+    await queryInterface.removeConstraint('products', 'products_ibfk_1');
+    await queryInterface.renameColumn('products', 'product_category_id', 'product_category', {
+      type: Sequelize.UUID,
+      allowNull: false
+    });
+    await queryInterface.addConstraint('products', {
+      fields: ['product_category'],
+      type: 'foreign key',
+      // name: 'products_ibfk_1',
+      references: {
+        table: 'product_categories',
+        field: 'id'
+      },
+      // onDelete: 'cascade',
+      // onUpdate: 'cascade'
+    });
   },
 
-  async down (queryInterface, Sequelize) {
+  async down(queryInterface, Sequelize) {
     /**
      * Add reverting commands here.
      *
      * Example:
      * await queryInterface.dropTable('users');
      */
-    await queryInterface.changeColumn("product","productCategoryId",{
-      type:Sequelize.UUID,
-      allowNull:false,
-      field:"productCategoryId"
-    })
+
+    // await queryInterface.renameColumn("products","product_category","product_category_id")
+    await queryInterface.removeConstraint('products', 'products_ibfk_1');
+    await queryInterface.renameColumn('products', 'product_category', 'product_category_id');
+    // await queryInterface.addConstraint('products', {
+    //   fields: ['product_category_id'],
+    //   type: 'foreign key',
+    //   name: 'products_ibfk_1',
+    //   references: {
+    //     table: 'product_categories',
+    //     field: 'id'
+    //   },
+    //   // onDelete: 'cascade',
+    //   // onUpdate: 'cascade'
+    // });
 
 
   }
