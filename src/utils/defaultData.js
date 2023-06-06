@@ -14,7 +14,7 @@ const generateData = async () => {
       name: "xbox",
       description: "Xbox console",
       brand: "xbox",
-      price: 400.00,
+      price: 400,
       productCategoryId:"6c4f7883-5b93-414a-a87d-d2b8aa9e968b"
     },
     {
@@ -40,7 +40,7 @@ const generateData = async () => {
       name: "play station",
       description: "play station console",
       brand: "sony",
-      price: 650.00,
+      price: 650,
       status:"suspended",
       productCategoryId:"6c4f7883-5b93-414a-a87d-d2b8aa9e968b"
 
