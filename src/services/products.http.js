@@ -1,4 +1,6 @@
 const productsControllers = require("../controllers/products.controllers");
+const fs = require('fs-extra')
+
 
 const getAll = (req, res) => {
   productsControllers.readAllProducts()
@@ -37,11 +39,38 @@ const post = (req, res) => {
     })
   }
 
-  if (req.files?.image) {
-    file = req.files;
-  }
+  let filteredFiles = [];
 
-  productsControllers.createProduct(data, file)
+  if (req.files?.image) {
+    file = req.files.image;
+
+    if (!file.length) {
+
+      file = [file];
+      console.log("file individual como array",file);
+    }
+
+    const allowedExtensions = ['png', 'jpg', 'jpeg', 'gif'];
+
+    filteredFiles = file.filter((file, i) => {
+      console.log("file en filter", file );
+      const extension = file.name.split('.').pop().toLowerCase();
+      console.log({ extension });
+      console.log(allowedExtensions.includes(extension));
+      // return allowedExtensions.includes(extension);
+
+      if (allowedExtensions.includes(extension)) {
+        console.log("retornando en filteredFiles",file);
+        return file;
+      }else{
+        fs.unlink(file.tempFilePath);
+
+      }
+    })
+  }
+  console.log({ filteredFiles });
+
+  productsControllers.createProduct(data, filteredFiles)
     .then(response => {
       return res.status(201).json({
         message: `Product createad successfully with id ${response.id}`,
