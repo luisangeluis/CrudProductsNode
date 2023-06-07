@@ -1,4 +1,7 @@
 const productsControllers = require("../controllers/products.controllers");
+const fs = require('fs-extra');
+const { filterAllowedFiles } = require("../utils/filterAllowedFiles");
+
 
 const getAll = (req, res) => {
   productsControllers.readAllProducts()
@@ -37,11 +40,17 @@ const post = (req, res) => {
     })
   }
 
+  let allowedFiles = [];
+
   if (req.files?.image) {
-    file = req.files;
+    file = req.files.image;
+
+    if (!file.length) file = [file];
+
+    allowedFiles = filterAllowedFiles(file);
   }
 
-  productsControllers.createProduct(data, file)
+  productsControllers.createProduct(data, allowedFiles)
     .then(response => {
       return res.status(201).json({
         message: `Product createad successfully with id ${response.id}`,
@@ -60,11 +69,18 @@ const update = (req, res) => {
 
   if (!Object.keys(restOfData).length) return res.status(400).json({ message: "Missing data" });
 
+  let allowedFiles = [];
+
   if (req.files?.image) {
-    file = req.files;
+    // file = req.files;
+    file = req.files.image;
+
+    if (!file.length) file = [file];
+
+    allowedFiles = filterAllowedFiles(file);
   }
 
-  productsControllers.updateProduct(productId, restOfData, file)
+  productsControllers.updateProduct(productId, restOfData, allowedFiles)
     .then(response => {
       console.log({ response });
       if (response[0])
