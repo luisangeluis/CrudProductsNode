@@ -1,5 +1,6 @@
 const productsControllers = require("../controllers/products.controllers");
-const fs = require('fs-extra')
+const fs = require('fs-extra');
+const { filterAllowedFiles } = require("../utils/filterAllowedFiles");
 
 
 const getAll = (req, res) => {
@@ -39,38 +40,17 @@ const post = (req, res) => {
     })
   }
 
-  let filteredFiles = [];
+  let allowedFiles = [];
 
   if (req.files?.image) {
     file = req.files.image;
 
-    if (!file.length) {
+    if (!file.length) file = [file];
 
-      file = [file];
-      console.log("file individual como array",file);
-    }
-
-    const allowedExtensions = ['png', 'jpg', 'jpeg', 'gif'];
-
-    filteredFiles = file.filter((file, i) => {
-      console.log("file en filter", file );
-      const extension = file.name.split('.').pop().toLowerCase();
-      console.log({ extension });
-      console.log(allowedExtensions.includes(extension));
-      // return allowedExtensions.includes(extension);
-
-      if (allowedExtensions.includes(extension)) {
-        console.log("retornando en filteredFiles",file);
-        return file;
-      }else{
-        fs.unlink(file.tempFilePath);
-
-      }
-    })
+    allowedFiles = filterAllowedFiles(file);
   }
-  console.log({ filteredFiles });
 
-  productsControllers.createProduct(data, filteredFiles)
+  productsControllers.createProduct(data, allowedFiles)
     .then(response => {
       return res.status(201).json({
         message: `Product createad successfully with id ${response.id}`,
@@ -89,11 +69,18 @@ const update = (req, res) => {
 
   if (!Object.keys(restOfData).length) return res.status(400).json({ message: "Missing data" });
 
+  let allowedFiles = [];
+
   if (req.files?.image) {
-    file = req.files;
+    // file = req.files;
+    file = req.files.image;
+
+    if (!file.length) file = [file];
+
+    allowedFiles = filterAllowedFiles(file);
   }
 
-  productsControllers.updateProduct(productId, restOfData, file)
+  productsControllers.updateProduct(productId, restOfData, allowedFiles)
     .then(response => {
       console.log({ response });
       if (response[0])

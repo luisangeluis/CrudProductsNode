@@ -69,12 +69,20 @@ const updateProduct = async (productId, data, file) => {
       { where: { id: productId } }
     );
 
-    if (file?.image) {
+    // if (file?.image) {
+    //   // console.log(file.image);
+
+    //   file.image.length
+    //     ? await ProductsImagesControllers.createImages(productId, file.image)
+    //     : await ProductsImagesControllers.createImage(productId, file.image);
+    // }
+
+    if (file) {
       // console.log(file.image);
 
-      file.image.length
-        ? await ProductsImagesControllers.createImages(productId, file.image)
-        : await ProductsImagesControllers.createImage(productId, file.image);
+      file.length
+        ? await ProductsImagesControllers.createImages(productId, file)
+        : await ProductsImagesControllers.createImage(productId, file);
     }
 
     return response;
