@@ -6,8 +6,9 @@ const filterAllowedFiles = (files) => {
   let allowedFiles = [];
 
   allowedFiles = files.filter((file, i) => {
+    console.log({file});
     const extension = file.name.split('.').pop().toLowerCase();
-    if (allowedExtensions.includes(extension)) {
+    if (allowedExtensions.includes(extension) & file.size <= 500000) {
       return file;
     } else {
       fs.unlink(file.tempFilePath);
